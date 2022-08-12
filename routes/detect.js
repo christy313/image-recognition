@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const path = require("path");
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -10,6 +12,25 @@ const stub = ClarifaiStub.grpc();
 
 const metadata = new grpc.Metadata();
 metadata.set("authorization", `Key ${process.env.CLARIFAI_KEY}`);
+
+const checkFileType = (file, cb) => {
+  const filetypes = /jpeg|jpg|png/;
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = filetypes.test(file.mimetype);
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb("Error: Images Only!");
+  }
+};
+
+const upload = multer({
+  storage: multer.memoryStorage({}),
+  limits: { fileSize: 2000000 },
+  fileFilter: function (_req, file, cb) {
+    checkFileType(file, cb);
+  },
+});
 
 const detectImage = (inputs) => {
   return new Promise((resolve, reject) => {
@@ -67,6 +88,28 @@ router.post("/", async (req, res, next) => {
     });
   } catch (err) {
     return res.status(400).send({
+      error: err,
+    });
+  }
+});
+
+router.post("/upload", upload.single("file"), async (req, res, next) => {
+  try {
+    const inputs = [
+      {
+        data: {
+          image: {
+            base64: req.file.buffer,
+          },
+        },
+      },
+    ];
+    const results = await detectImage(inputs);
+    return res.send({
+      results,
+    });
+  } catch (err) {
+    res.status(400).send({
       error: err,
     });
   }
