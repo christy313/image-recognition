@@ -14,7 +14,7 @@ export default function Output(props) {
               alt="detect"
             />
           ) : (
-            <div>Image</div>
+            <div>Image will be detected here.</div>
           )}
         </div>
       </Col>

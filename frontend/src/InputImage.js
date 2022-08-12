@@ -27,11 +27,14 @@ export default function InputImage(props) {
     "https://images.unsplash.com/photo-1573865526739-10659fec78a5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=715&q=80"
   );
 
+  const [fileObj, setFileObj] = useState(null);
+
   const handleChangeImageUrl = (e) => {
     setImageUrl(e.target.value);
   };
 
   const detectImage = () => {
+    setOutputs([]);
     setImageToDetect(imageUrl);
     axios
       .post("/detect", {
@@ -43,6 +46,34 @@ export default function InputImage(props) {
       .catch((err) => {
         alert(err);
       });
+  };
+
+  const detectImageByUpload = () => {
+    setOutputs([]);
+    const formData = new FormData();
+    formData.append("file", fileObj);
+    const reader = new FileReader();
+    reader.addEventListener("load", function () {
+      setImageToDetect(reader.result);
+    });
+
+    if (fileObj) {
+      reader.readAsDataURL(fileObj);
+    }
+
+    axios
+      .post("/detect/upload", formData)
+      .then((res) => {
+        setOutputs(res.data.results);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+  const handleFileFormControlOnChange = (e) => {
+    if (e.target.files.length) {
+      setFileObj(e.target.files[0]);
+    }
   };
 
   return (
@@ -82,7 +113,15 @@ export default function InputImage(props) {
           </Button>
         </div>
       ) : (
-        <div>Upload you image</div>
+        <div>
+          <Form.Group controlId="file" className="mb-3">
+            <Form.Control
+              type="file"
+              onChange={handleFileFormControlOnChange}
+            />
+          </Form.Group>
+          <Button onClick={detectImageByUpload}>Submit</Button>
+        </div>
       )}
     </Stack>
   );

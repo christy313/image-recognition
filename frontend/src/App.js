@@ -1,7 +1,8 @@
 import { useState } from "react";
 import InputImage from "./InputImage";
-import { Container, Stack } from "react-bootstrap";
+import { Container, Stack, Navbar } from "react-bootstrap";
 import Output from "./Output";
+import { MdOutlineImageSearch } from "react-icons/md";
 
 export default function App() {
   const [outputs, setOutputs] = useState([]);
@@ -9,6 +10,13 @@ export default function App() {
 
   return (
     <div>
+      <Navbar bg="dark" variant="dark">
+        <Navbar.Brand style={{ display: "flex", alignItems: "center" }}>
+          <MdOutlineImageSearch
+            style={{ marginLeft: "12px", marginRight: "8px" }}
+          />
+        </Navbar.Brand>
+      </Navbar>
       <Container>
         <div className="mt-3" />
         <Stack gap={2}>
