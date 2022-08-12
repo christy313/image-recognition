@@ -1,7 +1,6 @@
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
-const http = require("http");
 const detectRouter = require("./routes/detect");
 
 const app = express();
@@ -18,12 +17,6 @@ app.get("/", (req, res) => {
 app.use("/detect", detectRouter);
 app.set("port", port);
 
-// app.listen(port, () => {
-//   console.log(`Listening on port ${port}`);
-// });
-
-const server = http.createServer(app);
-server.listen(port);
-server.on("listening", () => {
-  console.log("Listening on " + port);
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
 });
