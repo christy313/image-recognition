@@ -15,6 +15,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/detect", detectRouter);
+app.get("/", (req, res) => {
+  return res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 app.set("port", port);
 
 app.listen(port, () => {

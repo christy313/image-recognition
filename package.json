@@ -8,6 +8,9 @@
     "start": "node ./app.js",
     "start:dev": "nodemon ./app.js"
   },
+  "engines": {
+    "node": "16.x.x"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/christy313/image-recognition.git"
