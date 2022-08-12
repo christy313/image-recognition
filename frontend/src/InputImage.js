@@ -2,7 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { FormControl, Button } from "react-bootstrap";
 
-export default function InputImage() {
+export default function InputImage(props) {
+  const { setOutputs, setImageToDetect } = props;
   const [imageUrl, setImageUrl] = useState(
     "https://images.unsplash.com/photo-1573865526739-10659fec78a5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=715&q=80"
   );
@@ -12,12 +13,13 @@ export default function InputImage() {
   };
 
   const detectImage = () => {
+    setImageToDetect(imageUrl);
     axios
       .post("/detect", {
         imageUrl: imageUrl,
       })
       .then((res) => {
-        alert(JSON.stringify(res.data));
+        setOutputs(res.data.results);
       })
       .catch((err) => {
         alert(err);

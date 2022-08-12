@@ -12,7 +12,10 @@ export default function App() {
       <Container>
         <div className="mt-3" />
         <Stack gap={2}>
-          <InputImage />
+          <InputImage
+            setOutputs={setOutputs}
+            setImageToDetect={setImageToDetect}
+          />
           <Output outputs={outputs} imageToDetect={imageToDetect} />
         </Stack>
       </Container>
