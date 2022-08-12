@@ -15,6 +15,7 @@ export default function App() {
           <MdOutlineImageSearch
             style={{ marginLeft: "12px", marginRight: "8px" }}
           />
+          Image Recognition
         </Navbar.Brand>
       </Navbar>
       <Container>
