@@ -10,6 +10,20 @@ export default function InputImage() {
   const handleChangeImageUrl = (e) => {
     setImageUrl(e.target.value);
   };
+
+  const detectImage = () => {
+    axios
+      .post("/detect", {
+        imageUrl: imageUrl,
+      })
+      .then((res) => {
+        alert(JSON.stringify(res.data));
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
   return (
     <div>
       <FormControl
@@ -18,7 +32,9 @@ export default function InputImage() {
         value={imageUrl}
         placeholder="Image URL"
       />
-      <Button variant="primary">Submit</Button>
+      <Button onClick={detectImage} variant="primary">
+        Submit
+      </Button>
     </div>
   );
 }
